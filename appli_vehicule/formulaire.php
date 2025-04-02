@@ -1,17 +1,13 @@
 <?php 
-include("lien_sql.php");
+include("Bdd.php");
+$pdo=Bdd::PDO();
 
 if (isset($_REQUEST["id"])){
     $sql="SELECT * FROM voitures WHERE id_voiture=".$_REQUEST["id"];
     $temp = $pdo->query($sql);
     $modifier = $temp->fetch();
 }
-
-
-
 ?>
-
-
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -22,23 +18,26 @@ if (isset($_REQUEST["id"])){
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <?php
+    include("vehicule.php");
+    $vehicules = Vehicule::all();
     if($_REQUEST["action"] == "modifier"){
-        echo"
-            <form method='get' action='voiture.php'>
-                <input name='marque' type='text' value=".$modifier["marque"].">
-                <input name='modele' type='text' value=".$modifier["modele"].">
-                <input name='immatriculation' type='date' value=".$modifier["immatriculation"].">
-                <select name='statut'>
-                    <option value='1'>Disponible</option>
-                    <option value='0' ";if ($modifier["statut"] == 0){echo "selected";} echo">Non disponible</option>
-                </select>
-                <input name='prix' type='number' value=".$modifier["prix"].">
-                <input name='id' type='hidden' value=".$_REQUEST["id"].">
-                <input name ='bouton' type='submit' value='modifier'>
-            </form>";
-    }
+        foreach ($vehicules as $vehicule):
+            echo"
+                <form method='get' action='voiture.php'>
+                    <input name='marque' type='text' value=".$vehicule->marque.">
+                    <input name='modele' type='text' value=".$vehicule->modele.">
+                    <input name='immatriculation' type='date' value=".$vehicule->immatriculation.">
+                    <select name='statut'>
+                        <option value='1'>Disponible</option>
+                        <option value='0' ";if ($modifier["statut"] == 0){echo "selected";} echo">Non disponible</option>
+                    </select>
+                    <input name='prix' type='number' value=".$vehicule->prix.">
+                    <input name='id' type='hidden' value=".$_REQUEST["id"].">
+                    <input name ='bouton' type='submit' value='modifier'>
+                </form>";
+        endforeach;
+        }
     if($_REQUEST["action"] == "ajouter"){
         echo"
             <form method='get' action='voiture.php'>
@@ -53,8 +52,6 @@ if (isset($_REQUEST["id"])){
                 <input name ='bouton' type='submit' value='ajouter'>
             </form>";
     }
-
-
 ?>
 <script src="script.js"></script>
 </body>

@@ -1,6 +1,7 @@
 <?php
 
-class Vehicule{
+class Vehicule
+{
 
     public $id;
     public $marque;
@@ -21,24 +22,8 @@ public function __construct(array $row = []) {
 }
 
 public static function all(){
-    $host="localhost";
-    $db="appli_vehicule";
-    $user="root";
-    $pass="";
-    $port="3306";
-    $charset="utf8mb4";
-    $dsn="mysql:host=$host;dbname=$db;charset=$charset;port=$port";
-    $option=[
-        PDO::ATTR_ERRMODE   =>\PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_DEFAULT_FETCH_MODE => \PDO::FETCH_ASSOC,
-        PDO::ATTR_EMULATE_PREPARES => false,
-    ];
-    try{
-        $pdo=new PDO($dsn, $user, $pass, $option);
-    }
-    catch(PDOException $e){
-        echo $e->getMessage();
-    }
+    require_once('Bdd.php');
+    $pdo=Bdd::PDO();
     if (!isset($pdo)){
         echo "erreur de connexion";
     }
@@ -47,7 +32,7 @@ public static function all(){
     $result=$temp->fetchAll();
     $vehicules=[];
     foreach ($result as $row){
-        $vehicules[] = new Vehicule($row);
+        $vehicules[] = new Vehicule($row); 
     }
     return $vehicules;
 }
