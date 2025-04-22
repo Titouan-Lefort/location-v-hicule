@@ -33,15 +33,18 @@ class Bdd
     return $pdo;
 }
 
-    public static function commande(string $sql){
-        $pdo = Bdd::PDO();
-        $sql2 = $sql;
-        $pdo->exec($sql2);
+
+public static function execution($sql, array $parametre) {
+    $pdo = Bdd::PDO();
+    $com = $pdo->prepare($sql);
+    $com->execute([
+        ':marque' => $parametre[0],
+        ':modele' => $parametre[1],
+        ':immatriculation' => $parametre[2],
+        ':statut' => $parametre[3],
+        ':prix' => $parametre[4]
+    ]);
+    $_SESSION["action"] = "";
 }
-
-public static function formulaire(){
-
-}
-
 }
 ?>
